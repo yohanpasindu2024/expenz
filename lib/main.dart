@@ -1,3 +1,7 @@
+import 'package:expenz/constants/colors.dart';
+import 'package:expenz/constants/strings.dart';
+import 'package:expenz/constants/values.dart';
+import 'package:expenz/screens/on_boarding_screen/front_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +13,28 @@ class EXpenzApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: yAppName,
+      theme: ThemeData(
+        fontFamily: "Inter",
+        buttonTheme: ButtonThemeData(
+          buttonColor: yPurpleColor,
+          textTheme: ButtonTextTheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              yBorderRadius200,
+            ),
+          ),
+        ),
+        scaffoldBackgroundColor: yWhiteColor,
+        primaryColor: yPurpleColor,
+        iconTheme: IconThemeData(
+          color: yPurpleColor,
+          size: yIconSize300,
+        ),
+      ),
+      home: const FrontPage(),
+    );
   }
 }
