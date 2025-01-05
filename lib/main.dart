@@ -3,8 +3,11 @@ import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferences.getInstance();
   runApp(const EXpenzApp());
 }
 

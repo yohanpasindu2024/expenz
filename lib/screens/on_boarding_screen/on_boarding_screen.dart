@@ -4,7 +4,7 @@ import 'package:expenz/constants/values.dart';
 import 'package:expenz/data/ui_data/on_boarding_screen_data.dart';
 import 'package:expenz/reusables/onboarding_container.dart';
 import 'package:expenz/reusables/reusable_text_button.dart';
-import 'package:expenz/screens/home_page/user_form_page.dart';
+import 'package:expenz/screens/form_page/user_form_page.dart';
 import 'package:expenz/screens/on_boarding_screen/front_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

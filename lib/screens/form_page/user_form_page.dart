@@ -2,6 +2,8 @@ import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/reusables/reusable_text_button.dart';
+import 'package:expenz/screens/home_page/home_page.dart';
+import 'package:expenz/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class UserFormPage extends StatefulWidget {
@@ -69,10 +71,10 @@ class _UserFormPageState extends State<UserFormPage> {
                         controller: _userNameController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter your name";
+                            return yEnterName;
                           } else {
                             if (value.length > 18) {
-                              return "Oops! name is too long";
+                              return yNameIsLong;
                             }
                           }
                         },
@@ -87,12 +89,12 @@ class _UserFormPageState extends State<UserFormPage> {
                         controller: _emailController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter your email";
+                            return yEnterEmail;
                           } else {
                             if (value.contains("@") && value.contains(".")) {
                               return null;
                             } else {
-                              return "Please enter a valid email";
+                              return yValidEmail;
                             }
                           }
                         },
@@ -108,12 +110,12 @@ class _UserFormPageState extends State<UserFormPage> {
                         obscureText: _passwrodShow,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Passord cannot be empty";
+                            return yPassordEmpty;
                           } else {
                             if (value.length > 6 && value.length < 18) {
                               return null;
                             } else {
-                              return "Password must be between 6 to 18 characters";
+                              return yPassowrdLength;
                             }
                           }
                         },
@@ -138,12 +140,12 @@ class _UserFormPageState extends State<UserFormPage> {
                         obscureText: _confirmPasswordShow,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Confirm Password cannot be empty";
+                            return "$yConfirm $yPassordEmpty";
                           } else {
                             if (value == _passwordController.text) {
                               return null;
                             } else {
-                              return "Password does not match";
+                              return yPasswordMatch;
                             }
                           }
                         },
@@ -197,8 +199,36 @@ class _UserFormPageState extends State<UserFormPage> {
                       ),
                       Material(
                         child: InkWell(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {}
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final String userName = _userNameController.text;
+                              final String email = _emailController.text;
+                              final String password = _passwordController.text;
+                              final String confirmPassword =
+                                  _confirmPasswordController.text;
+
+                              await UserService.saveUserData(
+                                userName: userName,
+                                email: email,
+                                password: password,
+                                confirmPassword: confirmPassword,
+                                rememberMe: _rememberMe,
+                                context: context,
+                              );
+
+                              await Future.delayed(
+                                Duration(seconds: 2),
+                              );
+
+                              if (context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              }
+                            }
                           },
                           child: ReusableTextButton(),
                         ),
