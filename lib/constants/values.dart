@@ -1,8 +1,22 @@
 const double yBorderRadius100 = 4.0;
 const double yBorderRadius200 = 8.0;
 
-const double yIconSize100 = 10.0;
-const double yIconSize150 = 15.0;
-const double yIconSize200 = 20.0;
-const double yIconSize250 = 25.0;
-const double yIconSize300 = 30.0;
+const double y100 = 10.0;
+const double y150 = 15.0;
+const double y200 = 20.0;
+const double y250 = 25.0;
+const double y300 = 30.0;
+const double y350 = 35.0;
+const double y400 = 40.0;
+const double y450 = 45.0;
+const double y500 = 50.0;
+const double y550 = 55.0;
+const double y600 = 60.0;
+const double y650 = 65.0;
+const double y700 = 70.0;
+const double y750 = 75.0;
+const double y800 = 80.0;
+const double y850 = 85.0;
+const double y900 = 90.0;
+const double y950 = 95.0;
+const double y1000 = 100.0;

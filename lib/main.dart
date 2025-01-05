@@ -1,7 +1,7 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
-import 'package:expenz/screens/on_boarding_screen/front_page.dart';
+import 'package:expenz/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,10 +31,10 @@ class EXpenzApp extends StatelessWidget {
         primaryColor: yPurpleColor,
         iconTheme: IconThemeData(
           color: yPurpleColor,
-          size: yIconSize300,
+          size: y300,
         ),
       ),
-      home: const FrontPage(),
+      home: const OnBoardingScreen(),
     );
   }
 }
