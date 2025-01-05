@@ -1,5 +1,19 @@
 const double yBorderRadius100 = 4.0;
 const double yBorderRadius200 = 8.0;
+const double yBorderRadius300 = 12.0;
+const double yBorderRadius350 = 14.0;
+const double yBorderRadius400 = 16.0;
+const double yBorderRadius500 = 20.0;
+const double yBorderRadius600 = 24.0;
+const double yBorderRadius700 = 28.0;
+const double yBorderRadius800 = 32.0;
+const double yBorderRadius900 = 36.0;
+const double yBorderRadius1000 = 40.0;
+const double yBorderRadius1100 = 44.0;
+const double yBorderRadius1200 = 48.0;
+const double yBorderRadius1300 = 52.0;
+const double yBorderRadius1400 = 56.0;
+const double yBorderRadius1500 = 60.0;
 
 const double y100 = 10.0;
 const double y150 = 15.0;
