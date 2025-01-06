@@ -1,7 +1,5 @@
-import 'package:expenz/constants/colors.dart';
-import 'package:expenz/constants/strings.dart';
-import 'package:expenz/constants/values.dart';
-import 'package:expenz/screens/on_boarding_screen/on_boarding_screen.dart';
+import 'package:expenz/services/user_service.dart';
+import 'package:expenz/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,28 +14,16 @@ class EXpenzApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: yAppName,
-      theme: ThemeData(
-        fontFamily: "Inter",
-        buttonTheme: ButtonThemeData(
-          buttonColor: yPurpleColor,
-          textTheme: ButtonTextTheme.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              yBorderRadius200,
-            ),
-          ),
-        ),
-        scaffoldBackgroundColor: yWhiteColor,
-        primaryColor: yPurpleColor,
-        iconTheme: IconThemeData(
-          color: yPurpleColor,
-          size: y300,
-        ),
-      ),
-      home: const OnBoardingScreen(),
+    return FutureBuilder(
+      future: UserService.checkRememberMe(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          bool rememberMe = snapshot.data ?? false;
+          return Wrapper(isHomePageShow: rememberMe);
+        }
+      },
     );
   }
 }
