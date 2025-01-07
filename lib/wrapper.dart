@@ -1,7 +1,7 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
-import 'package:expenz/screens/home_page/home_page.dart';
+import 'package:expenz/screens/main_layout/main_layout.dart';
 import 'package:expenz/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +40,8 @@ class _WrapperState extends State<Wrapper> {
           size: y300,
         ),
       ),
-      home: widget.isHomePageShow ? const HomePage() : const OnBoardingScreen(),
+      home:
+          widget.isHomePageShow ? const MainLayout() : const OnBoardingScreen(),
     );
   }
 }

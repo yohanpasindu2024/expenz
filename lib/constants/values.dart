@@ -15,6 +15,8 @@ const double yBorderRadius1300 = 52.0;
 const double yBorderRadius1400 = 56.0;
 const double yBorderRadius1500 = 60.0;
 
+const double y25 = 2.5;
+const double y50 = 5.0;
 const double y100 = 10.0;
 const double y150 = 15.0;
 const double y200 = 20.0;

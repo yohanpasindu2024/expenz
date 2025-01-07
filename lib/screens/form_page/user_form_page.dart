@@ -2,7 +2,7 @@ import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/reusables/reusable_text_button.dart';
-import 'package:expenz/screens/home_page/home_page.dart';
+import 'package:expenz/screens/main_layout/main_layout.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -77,6 +77,7 @@ class _UserFormPageState extends State<UserFormPage> {
                               return yNameIsLong;
                             }
                           }
+                          return null;
                         },
                         decoration: inputBorderDecoration(
                           hintText: " $yName",
@@ -224,7 +225,7 @@ class _UserFormPageState extends State<UserFormPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HomePage(),
+                                    builder: (context) => MainLayout(),
                                   ),
                                 );
                               }

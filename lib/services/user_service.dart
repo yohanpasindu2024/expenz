@@ -80,4 +80,16 @@ class UserService {
       return false;
     }
   }
+
+  static Future<String?> getUserName() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString('userName');
+    } catch (err) {
+      if (kDebugMode) {
+        print(err.toString());
+      }
+    }
+    return null;
+  }
 }
