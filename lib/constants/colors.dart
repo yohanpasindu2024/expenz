@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const Color yPurpleColor = Color(0xFF7F3DFF);
+const Color yBlueColor = Color(0xFF0077FF);
 const Color yGreyColor = Color(0xFFEEEEEE);
 const Color yWhiteColor = Color(0xFFFFFFFF);
 const Color yBlackColor = Color(0xFF000000);
