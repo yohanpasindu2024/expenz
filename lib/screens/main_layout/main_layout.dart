@@ -7,7 +7,10 @@ import 'package:expenz/screens/transcation_page/transcation_page.dart';
 import 'package:flutter/material.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+
+  const MainLayout({
+    super.key,
+  });
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -15,13 +18,20 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
-  final List<Widget> mainLayoutPages = [
-    HomePage(),
-    TranscationPage(),
-    AddNewPage(),
-    BudgetPage(),
-    ProfilePage(),
-  ];
+  late final List<Widget> mainLayoutPages;
+
+  @override
+  void initState() {
+    mainLayoutPages = <Widget>[
+      HomePage(),
+      TranscationPage(),
+      AddNewPage(),
+      BudgetPage(),
+      ProfilePage(),
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +44,7 @@ class _MainLayoutState extends State<MainLayout> {
         },
         selectedIndex: _selectedIndex,
       ),
-      body: mainLayoutPages[_selectedIndex],
+      body: mainLayoutPages[2],
     );
   }
 }

@@ -40,8 +40,7 @@ class _WrapperState extends State<Wrapper> {
           size: y300,
         ),
       ),
-      home:
-          widget.isHomePageShow ? const MainLayout() : const OnBoardingScreen(),
+      home: widget.isHomePageShow ? MainLayout() : const OnBoardingScreen(),
     );
   }
 }
