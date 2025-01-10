@@ -3,7 +3,6 @@ import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/income_model.dart';
-import 'package:expenz/models/ui_models/expense_income_model.dart/parent_expense_income_model.dart';
 import 'package:expenz/reusables/reusable_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,8 +21,9 @@ class ExpenseIncomeInputForm extends StatefulWidget {
 }
 
 class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
-  BaseCategory _incomeCategory = IncomeCategories.sallary; // * Income category
-  BaseCategory _expenseCategory =
+  IncomeCategories _incomeCategory =
+      IncomeCategories.sallary; // * Income category
+  ExpenseCategories _expenseCategory =
       ExpenseCategories.health; // * Expense category
 
   final _formKey = GlobalKey<FormState>(); // * Form key
