@@ -9,16 +9,6 @@ part "expense_model.g.dart";
 class Expense {
   final String id, description;
   @JsonKey(
-    fromJson: _imagePathMapFromJSON,
-    toJson: _imagePathMapToJSON,
-  )
-  final Map<ExpenseCategories, String> imagePathMap;
-  @JsonKey(
-    fromJson: _colorPathMapFromJSON,
-    toJson: _colorPathMapToJSON,
-  )
-  final Map<ExpenseCategories, Color> colorPathMap;
-  @JsonKey(
     toJson: _expenseCategoryToJSON,
     fromJson: _expenseCategoryFromJSON,
   )
@@ -35,8 +25,6 @@ class Expense {
   Expense({
     required this.id,
     required this.description,
-    required this.imagePathMap,
-    required this.colorPathMap,
     required this.category,
     required this.amount,
     required this.date,
@@ -45,60 +33,6 @@ class Expense {
 }
 
 // * Custom Converters for imagePathMap and colorPathMap
-
-// * Iamge path map converter
-Map<String, dynamic> _imagePathMapToJSON(
-  Map<ExpenseCategories, String> imagePathMap,
-) {
-  return imagePathMap.map(
-    (key, value) {
-      return MapEntry(
-        key.name,
-        value,
-      );
-    },
-  );
-}
-
-Map<ExpenseCategories, String> _imagePathMapFromJSON(
-  Map<String, dynamic> json,
-) {
-  return json.map(
-    (key, value) {
-      return MapEntry(
-        ExpenseCategories.values.byName(key),
-        value as String,
-      );
-    },
-  );
-}
-
-// * Color path map converter
-Map<String, dynamic> _colorPathMapToJSON(
-  Map<ExpenseCategories, Color> colorPathMap,
-) {
-  return colorPathMap.map(
-    (key, value) {
-      return MapEntry(
-        key.name,
-        value.toString(),
-      );
-    },
-  );
-}
-
-Map<ExpenseCategories, Color> _colorPathMapFromJSON(
-  Map<String, dynamic> json,
-) {
-  return json.map(
-    (key, value) {
-      return MapEntry(
-        ExpenseCategories.values.byName(key),
-        Color(value as int),
-      );
-    },
-  );
-}
 
 // * Expense category converter
 int _expenseCategoryToJSON(ExpenseCategories category) => category.index;
