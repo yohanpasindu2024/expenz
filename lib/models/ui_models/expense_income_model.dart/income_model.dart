@@ -1,106 +1,53 @@
 import 'package:expenz/constants/colors.dart';
+import 'package:expenz/constants/paths.dart';
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'income_model.g.dart';
 
-@JsonSerializable()
 class Income {
   final String id, description;
-  @JsonKey(
-    toJson: _imagePathMapToJSON,
-    fromJson: _imagePathMapFromJSON,
-  )
-  final Map<IncomeCategories, String> imagePathMap;
-  @JsonKey(
-    toJson: _colorPathMapToJSON,
-    fromJson: _colorPathMapFromJSON,
-  )
-  final Map<IncomeCategories, Color> colorPathMap;
-  @JsonKey(
-    toJson: _incomeCategoriesToJSON,
-    fromJson: _incomeCategoriesFromJSON,
-  )
   final IncomeCategories category;
   final double amount;
-  final DateTime date;
-  final DateTime time;
+  final DateTime date, time;
 
-  Map<String, dynamic> toJson() => _$IncomeToJson(this);
-
-  factory Income.dromJSON(Map<String, dynamic> jsonObj) =>
-      _$IncomeFromJson(jsonObj);
-
+  // INCOME constructor
   Income({
     required this.id,
     required this.description,
-    required this.imagePathMap,
-    required this.colorPathMap,
     required this.category,
     required this.amount,
     required this.date,
     required this.time,
   });
+
+  // GET image path and color
+  String get imagePath => incomeImagePathMap[category] ?? ySalaryIconImage;
+  Color get color => incomeColorPathMap[category] ?? yGreenColor;
+
+  // SERIALIZE Dart ----> Json
+  Map<String, dynamic> toJSON() {
+    return {
+      "id": id,
+      "desc": description,
+      "category": category.index,
+      "amount": amount,
+      "date": date.toIso8601String(),
+      "time": time.toIso8601String(),
+    };
+  }
+
+  // DESIRIALIZE json ----> Dart Object
+  factory Income.fromJSON(Map<String, dynamic> json) {
+    return Income(
+      id: json["id"] as String,
+      description: json["desc"] as String,
+      category: IncomeCategories.values[json["category"]],
+      amount: (json["amount"] as num).toDouble(),
+      date: DateTime.parse(json["date"] as String),
+      time: DateTime.parse(json["time"] as String),
+    );
+  }
 }
 
-// * Custome Converters
-
-// * Convert image paths to the json objects
-Map<String, dynamic> _imagePathMapToJSON(
-  Map<IncomeCategories, String> imagePathMap,
-) {
-  return imagePathMap.map(
-    (key, value) => MapEntry(
-      key.name,
-      value,
-    ),
-  );
-}
-
-// * Convert json objects to Dart objects
-Map<IncomeCategories, String> _imagePathMapFromJSON(
-  Map<String, dynamic> json,
-) {
-  return json.map(
-    (key, value) =>
-        MapEntry(IncomeCategories.values.byName(key), value as String),
-  );
-}
-
-// * Convert color path map to json objects
-Map<String, String> _colorPathMapToJSON(
-  Map<IncomeCategories, Color> colorObj,
-) {
-  return colorObj.map(
-    (key, value) => MapEntry(
-      key.name,
-      value.toString(),
-    ),
-  );
-}
-
-// * Convert json color path objects to Dart objects
-Map<IncomeCategories, Color> _colorPathMapFromJSON(
-  Map<String, String> jsonObj,
-) {
-  return jsonObj.map(
-    (key, value) => MapEntry(
-      IncomeCategories.values.byName(key),
-      Color(
-        int.parse(value.toString(), radix: 16),
-      ),
-    ),
-  );
-}
-
-// * Convert Income categories to Json indexes
-int _incomeCategoriesToJSON(IncomeCategories category) => category.index;
-
-// * Convert indexs to Income Categories
-IncomeCategories _incomeCategoriesFromJSON(int index) =>
-    IncomeCategories.values[index];
-
-// * Enum for Income Categories
-@JsonEnum()
+// ENUM form incomes
 enum IncomeCategories {
   sallary,
   freelance,
@@ -108,7 +55,7 @@ enum IncomeCategories {
   gift;
 }
 
-// * Map for Income Image Path
+// MAP for Income Image Path
 final Map<IncomeCategories, String> incomeImagePathMap = {
   IncomeCategories.sallary: 'assets/icons/salary.png',
   IncomeCategories.freelance: 'assets/icons/freelance.png',
@@ -116,7 +63,7 @@ final Map<IncomeCategories, String> incomeImagePathMap = {
   IncomeCategories.gift: 'assets/icons/food.png',
 };
 
-// * Map for Income Color Path
+// MAP for Income Color Path
 final Map<IncomeCategories, Color> incomeColorPathMap = {
   IncomeCategories.sallary: yGreenColor,
   IncomeCategories.freelance: yBlackColor,

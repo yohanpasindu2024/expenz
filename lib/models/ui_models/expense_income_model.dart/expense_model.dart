@@ -1,27 +1,15 @@
+
 import 'package:expenz/constants/colors.dart';
+import 'package:expenz/constants/paths.dart';
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part "expense_model.g.dart";
-
-// * Expense Model class
-@JsonSerializable()
 class Expense {
   final String id, description;
-  @JsonKey(
-    toJson: _expenseCategoryToJSON,
-    fromJson: _expenseCategoryFromJSON,
-  )
   final ExpenseCategories category;
   final double amount;
-  final DateTime date;
-  final DateTime time;
+  final DateTime date, time;
 
-  factory Expense.fromJSON(Map<String, dynamic> json) =>
-      _$ExpenseFromJson(json);
-
-  Map<String, dynamic> toJSON() => _$ExpenseToJson(this);
-
+  // EXPENSE constructor
   Expense({
     required this.id,
     required this.description,
@@ -30,18 +18,37 @@ class Expense {
     required this.date,
     required this.time,
   });
+
+  // GET image path and color
+  String get imagePath => expenseImagePathMap[category] ?? yFoodIconImage;
+  Color get color => expenseColorPathMap[category] ?? yOrangeColor;
+
+  // SERIALIZE DART ----> JSON
+  Map<String, dynamic> toJSON() {
+    return {
+      "id": id,
+      "desc": description,
+      "category": category.index,
+      "amount": amount,
+      "date": date.toIso8601String(),
+      "time": time.toIso8601String(),
+    };
+  }
+
+  // DESERIALIZE JSON ----> DART
+  factory Expense.fromJSON(Map<String, dynamic> json) {
+    return Expense(
+      id: json["id"] as String,
+      description: json["desc"] as String,
+      category: ExpenseCategories.values[json["category"]],
+      amount: (json["amount"] as num).toDouble(),
+      date: DateTime.parse(json["date"] as String),
+      time: DateTime.parse(json["time"] as String),
+    );
+  }
 }
 
-// * Custom Converters for imagePathMap and colorPathMap
-
-// * Expense category converter
-int _expenseCategoryToJSON(ExpenseCategories category) => category.index;
-
-ExpenseCategories _expenseCategoryFromJSON(int index) =>
-    ExpenseCategories.values[index];
-
-// * Expense Categories
-@JsonEnum()
+// ENUM for expenses
 enum ExpenseCategories {
   shopping,
   subscription,
@@ -50,7 +57,7 @@ enum ExpenseCategories {
   transport;
 }
 
-// * Expense Image Path Map
+// AMP for expense images
 final Map<ExpenseCategories, String> expenseImagePathMap = {
   ExpenseCategories.shopping: 'assets/images/shopping.png',
   ExpenseCategories.subscription: 'assets/images/salary.png',
@@ -59,7 +66,7 @@ final Map<ExpenseCategories, String> expenseImagePathMap = {
   ExpenseCategories.transport: 'assets/images/transport.png',
 };
 
-// * Expense Color Path Map
+// MAP for expense colors
 final Map<ExpenseCategories, Color> expenseColorPathMap = {
   ExpenseCategories.shopping: yYellowColor,
   ExpenseCategories.subscription: yPurpleColor,
