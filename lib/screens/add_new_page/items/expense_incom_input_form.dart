@@ -220,7 +220,6 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                 text: yAdd,
                 borderRadius: y500,
                 onTap: () async {
-                  print("Hello");
                   if (widget.pageState == 0) {}
                   if (widget.pageState == 1) {
                     int expenseIndex =
