@@ -8,6 +8,7 @@ import 'package:expenz/screens/add_new_page/items/re_usables/drop_down_reusable.
 import 'package:expenz/screens/add_new_page/items/re_usables/picker_reusable.dart';
 import 'package:expenz/screens/add_new_page/items/re_usables/text_field_reusable.dart';
 import 'package:expenz/services/expense_service.dart';
+import 'package:expenz/services/income_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -220,12 +221,27 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                 text: yAdd,
                 borderRadius: y500,
                 onTap: () async {
-                  if (widget.pageState == 0) {}
+                  if (widget.pageState == 0) {
+                    List<Income>? incomeList =
+                        await IncomeService().getIncomeItems(context);
+                    int incomeIndex = incomeList?.length ?? 0;
+                    Income newIncome = Income(
+                      id: (incomeIndex + 1).toString(),
+                      description: _incomeDescriptionController.text,
+                      category: incomeCategory,
+                      amount: double.tryParse(_incomeAmountController.text) ??
+                          (throw Exception("Invalid amount")),
+                      date: _selectedDate,
+                      time: _selectedTime,
+                    );
+                    widget.addNewItem(newIncome, null);
+                  }
                   if (widget.pageState == 1) {
-                    int expenseIndex =
-                        await ExpenseService().getExpenseItemCount() + 1;
+                    List<Expense>? expenseList =
+                        await ExpenseService().getExpensesAsList();
+                    int expenseIndex = expenseList?.length ?? 0;
                     Expense newExpense = Expense(
-                      id: expenseIndex.toString(),
+                      id: (expenseIndex + 1).toString(),
                       description: _expenseDescriptionController.text,
                       category: expenseCategory,
                       amount: double.tryParse(_expenseAmountController.text) ??
