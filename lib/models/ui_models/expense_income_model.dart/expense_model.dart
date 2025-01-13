@@ -59,11 +59,11 @@ enum ExpenseCategories {
 
 // AMP for expense images
 final Map<ExpenseCategories, String> expenseImagePathMap = {
-  ExpenseCategories.shopping: 'assets/images/shopping.png',
-  ExpenseCategories.subscription: 'assets/images/salary.png',
-  ExpenseCategories.foods: 'assets/images/food.png',
-  ExpenseCategories.health: 'assets/images/shopping.png',
-  ExpenseCategories.transport: 'assets/images/transport.png',
+  ExpenseCategories.shopping: 'assets/icons/shopping.png',
+  ExpenseCategories.subscription: 'assets/icons/salary.png',
+  ExpenseCategories.foods: 'assets/icons/food.png',
+  ExpenseCategories.health: 'assets/icons/shopping.png',
+  ExpenseCategories.transport: 'assets/icons/transport.png',
 };
 
 // MAP for expense colors

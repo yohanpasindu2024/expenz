@@ -33,6 +33,7 @@ const String yLineChartTitle = 'Spend Frequency';
 const String yRecentTransaction = 'Recent Transaction';
 const String yTransaction = 'Transaction';
 const String ySeeAll = 'See All';
+const String yYour = 'your';
 const String yFinancialReport = 'Financial Report';
 const String yCategory = 'Category';
 const String yBudget = 'Budget';

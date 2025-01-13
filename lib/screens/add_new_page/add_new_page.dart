@@ -1,7 +1,5 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/values.dart';
-import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
-import 'package:expenz/models/ui_models/expense_income_model.dart/income_model.dart';
 import 'package:expenz/screens/add_new_page/items/expense_incom_input_form.dart';
 import 'package:expenz/screens/add_new_page/items/free_text_field.dart';
 import 'package:expenz/screens/add_new_page/items/toggle_header.dart';
@@ -9,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddNewPage extends StatefulWidget {
-  final void Function(Income?, Expense?, int) addNewItem;
   const AddNewPage({
     super.key,
-    required this.addNewItem,
   });
 
   @override
@@ -28,7 +24,8 @@ class _AddNewPageState extends State<AddNewPage> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: _scaffoldBackgroundColor,
       statusBarIconBrightness: Brightness.light,
-    ));
+      ),
+    );
     return Scaffold(
       backgroundColor: _scaffoldBackgroundColor,
       body: SafeArea(
@@ -62,15 +59,6 @@ class _AddNewPageState extends State<AddNewPage> {
               ExpenseIncomeInputForm(
                 pageState: _pageState,
                 color: _scaffoldBackgroundColor,
-                addNewItem: (p0, p1) {
-                  if (p1 != null) {
-                    widget.addNewItem(null, p1, _pageState);
-                  }
-
-                  if (p0 != null) {
-                    widget.addNewItem(p0, null, _pageState);
-                  }
-                },
               ),
             ],
           ),

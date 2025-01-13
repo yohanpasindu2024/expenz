@@ -9,8 +9,10 @@ import 'package:expenz/screens/add_new_page/items/re_usables/picker_reusable.dar
 import 'package:expenz/screens/add_new_page/items/re_usables/text_field_reusable.dart';
 import 'package:expenz/services/expense_service.dart';
 import 'package:expenz/services/income_service.dart';
+import 'package:expenz/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 enum AddNewTextFieldType {
   title,
@@ -21,12 +23,10 @@ enum AddNewTextFieldType {
 class ExpenseIncomeInputForm extends StatefulWidget {
   final int pageState; // * Page state
   final Color color; // * Color
-  final void Function(Income?, Expense?) addNewItem;
   const ExpenseIncomeInputForm({
     super.key,
     required this.pageState,
     required this.color,
-    required this.addNewItem,
   });
 
   @override
@@ -36,7 +36,7 @@ class ExpenseIncomeInputForm extends StatefulWidget {
 class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
   final _formKey = GlobalKey<FormState>(); // * Form key
   ExpenseCategories expenseCategory = ExpenseCategories.shopping;
-  IncomeCategories incomeCategory = IncomeCategories.gift;
+  IncomeCategories incomeCategory = IncomeCategories.sallary;
   final TextEditingController _incomeTitleControllet =
       TextEditingController(); // * Income title controller
   final TextEditingController _incomeDescriptionController =
@@ -234,11 +234,22 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                       date: _selectedDate,
                       time: _selectedTime,
                     );
-                    widget.addNewItem(newIncome, null);
+                    if (context.mounted) {
+                      Provider.of<TransactionProvider>(context, listen: false)
+                          .addIncomeItem(newIncome, context);
+                    }
+                    // RESET all input fields
+                    _incomeTitleControllet.clear();
+                    _incomeDescriptionController.clear();
+                    _incomeAmountController.clear();
+                    incomeCategory = IncomeCategories.sallary;
+                    _selectedDate = DateTime.now();
+                    _selectedTime = DateTime.now();
                   }
-                  if (widget.pageState == 1) {
+
+                  if (context.mounted) {
                     List<Expense>? expenseList =
-                        await ExpenseService().getExpensesAsList();
+                        await ExpenseService().getExpensesAsList(context);
                     int expenseIndex = expenseList?.length ?? 0;
                     Expense newExpense = Expense(
                       id: (expenseIndex + 1).toString(),
@@ -249,7 +260,18 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                       date: _selectedDate,
                       time: _selectedTime,
                     );
-                    widget.addNewItem(null, newExpense);
+                    if (context.mounted) {
+                      Provider.of<TransactionProvider>(context, listen: false)
+                          .addExpenseItem(newExpense, context);
+                    }
+
+                    // RESET All input fields
+                    _expenseTitleControllet.clear();
+                    _expenseDescriptionController.clear();
+                    _expenseAmountController.clear();
+                    expenseCategory = ExpenseCategories.shopping;
+                    _selectedDate = DateTime.now();
+                    _selectedTime = DateTime.now();
                   }
                 },
               ),

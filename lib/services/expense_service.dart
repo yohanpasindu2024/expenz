@@ -6,24 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseService {
-  static final String _expenseKey = "expense";
+  static final String _key = "expense";
 
   // SAVE Expense Items as a List converted by json.
   Future<void> saveExpense(
     Expense expense,
     BuildContext context,
   ) async {
-    List<Expense> listOfExpenses = [];
-    List<String> updatedList = [];
+    List<Expense> decExpenseList = [];
+    List<String> serExpenseList = [];
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> listFromPrefs = prefs.getStringList(_expenseKey) ?? [];
+      serExpenseList = prefs.getStringList(_key) ?? [];
 
-      listOfExpenses =
-          listFromPrefs.map((e) => Expense.fromJSON(json.decode(e))).toList();
-      listOfExpenses.add(expense);
-      updatedList = listOfExpenses.map((e) => json.encode(e.toJSON())).toList();
-      await prefs.setStringList(_expenseKey, updatedList);
+      decExpenseList =
+          serExpenseList.map((e) => Expense.fromJSON(json.decode(e))).toList();
+      decExpenseList.add(expense);
+      serExpenseList =
+          decExpenseList.map((e) => json.encode(e.toJSON())).toList();
+      await prefs.setStringList(_key, serExpenseList);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -48,18 +49,25 @@ class ExpenseService {
   }
 
   // GET Expense items as Dart List obj.
-  Future<List<Expense>?> getExpensesAsList() async {
-    List<Expense> listOfExpenses = [];
-    List<String> updatedList = [];
+  Future<List<Expense>?> getExpensesAsList(BuildContext context) async {
+    List<Expense> decExpenseList = [];
+    List<String> serExpenseList = [];
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      updatedList = prefs.getStringList(_expenseKey) ?? [];
-      listOfExpenses =
-          updatedList.map((e) => Expense.fromJSON(json.decode(e))).toList();
-      return listOfExpenses;
+      serExpenseList = prefs.getStringList(_key) ?? [];
+      decExpenseList =
+          serExpenseList.map((e) => Expense.fromJSON(json.decode(e))).toList();
+      return decExpenseList;
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("The loading failure"),
+            ),
+          );
+        }
       }
     }
     return [];
