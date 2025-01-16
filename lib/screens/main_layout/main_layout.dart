@@ -54,7 +54,8 @@ class _MainLayoutState extends State<MainLayout> {
     });
     _calculateAllIncomes();
     if (listOfIncomes != null && listOfIncomes!.isNotEmpty) {
-      listOfRecents.add(RecentTranscationModel(income: listOfIncomes!.last));
+      listOfRecents.insert(
+          0, RecentTranscationModel(income: listOfIncomes!.last));
     }
   }
 
@@ -69,7 +70,8 @@ class _MainLayoutState extends State<MainLayout> {
     );
     _calculateAllExpenses();
     if (listOfExpenses != null && listOfExpenses!.isNotEmpty) {
-      listOfRecents.add(RecentTranscationModel(expense: listOfExpenses!.last));
+      listOfRecents.insert(
+          0, RecentTranscationModel(expense: listOfExpenses!.last));
     }
   }
 
@@ -86,7 +88,7 @@ class _MainLayoutState extends State<MainLayout> {
       listOfIncomes!.insert(0, income);
       _calculateAllIncomes();
       if (!listOfRecents.contains(RecentTranscationModel(income: income))) {
-        listOfRecents.add(RecentTranscationModel(income: income));
+        listOfRecents.insert(0, RecentTranscationModel(income: income));
       }
     });
   }
@@ -104,7 +106,7 @@ class _MainLayoutState extends State<MainLayout> {
       listOfExpenses!.insert(0, expense);
       _calculateAllExpenses();
       if (!listOfRecents.contains(RecentTranscationModel(expense: expense))) {
-        listOfRecents.add(RecentTranscationModel(expense: expense));
+        listOfRecents.insert(0, RecentTranscationModel(expense: expense));
       }
     });
   }
@@ -155,12 +157,14 @@ class _MainLayoutState extends State<MainLayout> {
 
     // Add the most recent income
     if (listOfIncomes != null && listOfIncomes!.isNotEmpty) {
-      listOfRecents.add(RecentTranscationModel(income: listOfIncomes!.last));
+      listOfRecents.insert(
+          0, RecentTranscationModel(income: listOfIncomes!.last));
     }
 
     // Add the most recent expense
     if (listOfExpenses != null && listOfExpenses!.isNotEmpty) {
-      listOfRecents.add(RecentTranscationModel(expense: listOfExpenses!.last));
+      listOfRecents.insert(
+          0, RecentTranscationModel(expense: listOfExpenses!.last));
     }
   }
 
@@ -207,6 +211,7 @@ class _MainLayoutState extends State<MainLayout> {
           "expense": totalExpense,
         },
         userName: userName,
+        listOfExpenses: listOfExpenses!,
       ),
       TranscationPage(
         removeExpense: (expense) => removeExpenseItem(expense: expense),

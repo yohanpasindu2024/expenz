@@ -24,7 +24,7 @@ class IncomeService {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       serIncomeList = prefs.getStringList(_key) ?? [];
       decIncomeList = _desrializeIncomeList(serIncomeList);
-      decIncomeList.add(income);
+      decIncomeList.insert(0, income);
       serIncomeList = _serializeIncomeList(decIncomeList);
       await prefs.setStringList(_key, serIncomeList);
       message("Income item ${income.category.name} saving successed");

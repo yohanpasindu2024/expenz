@@ -57,10 +57,10 @@ enum IncomeCategories {
 
 // MAP for Income Image Path
 final Map<IncomeCategories, String> incomeImagePathMap = {
-  IncomeCategories.sallary: 'assets/icons/salary.png',
-  IncomeCategories.freelance: 'assets/icons/freelance.png',
-  IncomeCategories.passiveIncome: 'assets/icons/transport.png',
-  IncomeCategories.gift: 'assets/icons/food.png',
+  IncomeCategories.sallary: ySalaryIconImage,
+  IncomeCategories.freelance: yFreeLanceIconImage,
+  IncomeCategories.passiveIncome: yPasinveIncomeImage,
+  IncomeCategories.gift: yGiftImage,
 };
 
 // MAP for Income Color Path

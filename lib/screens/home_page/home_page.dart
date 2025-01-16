@@ -2,8 +2,10 @@ import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/paths.dart';
 import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
+import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/recent_transcation_model.dart';
 import 'package:expenz/screens/home_page/items/amount_expenzes_card.dart';
+import 'package:expenz/screens/home_page/items/line_chart_widget.dart';
 import 'package:expenz/screens/transcation_page/items/income_expense_display_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,11 +15,13 @@ class HomePage extends StatefulWidget {
   final String userName;
   final Map<String, double> totalValue;
   final List<RecentTranscationModel> listOfRecents;
+  final List<Expense> listOfExpenses;
   const HomePage({
     super.key,
     required this.userName,
     required this.totalValue,
     required this.listOfRecents,
+    required this.listOfExpenses,
   });
 
   @override
@@ -138,6 +142,33 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: y150,
             ),
+            if (widget.listOfExpenses.isNotEmpty &&
+                widget.listOfExpenses.length > 2) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: y150,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      yLineChartTitle,
+                      style: TextStyle(
+                        fontSize: y150 + 4,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      height: y200,
+                    ),
+                    LineChartWidget(
+                      listOfExpenses: widget.listOfExpenses,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: y150,

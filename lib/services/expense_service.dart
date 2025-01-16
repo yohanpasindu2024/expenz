@@ -18,7 +18,7 @@ class ExpenseService {
       serExpenseList = prefs.getStringList(_key) ?? [];
 
       decExpenseList = _deserializeList(serExpenseList);
-      decExpenseList.add(expense);
+      decExpenseList.insert(0, expense);
       serExpenseList = _serializeExpenseList(decExpenseList);
       await prefs.setStringList(_key, serExpenseList);
       message("The item ${expense.category.name} is succesfully saved");

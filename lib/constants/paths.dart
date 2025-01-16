@@ -11,4 +11,7 @@ const String yShoppingIconImage = 'assets/icons/shopping.png';
 const String yTransportIconImage = 'assets/icons/transport.png';
 const String ySalaryIconImage = 'assets/icons/salary.png';
 const String yFreeLanceIconImage = 'assets/icons/freelance.png';
-
+const String yPasinveIncomeImage = "assets/icons/passive.png";
+const String ySubImage = "assets/icons/sub.png";
+const String yHealthImage = "assets/icons/health.png";
+const String yGiftImage = "assets/icons/gift.png";
