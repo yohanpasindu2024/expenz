@@ -7,12 +7,8 @@ import 'package:expenz/reusables/reusable_text_button.dart';
 import 'package:expenz/screens/add_new_page/items/re_usables/drop_down_reusable.dart';
 import 'package:expenz/screens/add_new_page/items/re_usables/picker_reusable.dart';
 import 'package:expenz/screens/add_new_page/items/re_usables/text_field_reusable.dart';
-import 'package:expenz/services/expense_service.dart';
-import 'package:expenz/services/income_service.dart';
-import 'package:expenz/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 enum AddNewTextFieldType {
   title,
@@ -21,12 +17,18 @@ enum AddNewTextFieldType {
 }
 
 class ExpenseIncomeInputForm extends StatefulWidget {
-  final int pageState; // * Page state
-  final Color color; // * Color
+  final int pageState; // Page state
+  final Color color; // Color
+  final void Function(Income) addIncome;
+  final void Function(Expense) addExpense;
+  final Map<String, int> listLength;
   const ExpenseIncomeInputForm({
     super.key,
     required this.pageState,
     required this.color,
+    required this.addIncome,
+    required this.addExpense,
+    required this.listLength,
   });
 
   @override
@@ -34,36 +36,36 @@ class ExpenseIncomeInputForm extends StatefulWidget {
 }
 
 class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
-  final _formKey = GlobalKey<FormState>(); // * Form key
+  final _formKey = GlobalKey<FormState>(); //  Form key
   ExpenseCategories expenseCategory = ExpenseCategories.shopping;
   IncomeCategories incomeCategory = IncomeCategories.sallary;
   final TextEditingController _incomeTitleControllet =
-      TextEditingController(); // * Income title controller
+      TextEditingController(); // Income title controller
   final TextEditingController _incomeDescriptionController =
-      TextEditingController(); // * Income description controller
+      TextEditingController(); // Income description controller
   final TextEditingController _incomeAmountController =
-      TextEditingController(); // * Income amount controller
+      TextEditingController(); // Income amount controller
   final TextEditingController _expenseTitleControllet =
-      TextEditingController(); // * Expense title controller
+      TextEditingController(); // Expense title controller
   final TextEditingController _expenseDescriptionController =
-      TextEditingController(); // * Expense description controller
+      TextEditingController(); // Expense description controller
   final TextEditingController _expenseAmountController =
-      TextEditingController(); // * Expense amount controller
-  DateTime _selectedDate = DateTime.now(); // * Selected date
-  DateTime _selectedTime = DateTime.now(); // * Selected time
+      TextEditingController(); // Expense amount controller
+  DateTime _selectedDate = DateTime.now(); // Selected date
+  DateTime _selectedTime = DateTime.now(); // Selected time
 
   @override
   void dispose() {
-    _incomeTitleControllet.dispose(); // * Dispose the income title controller
+    _incomeTitleControllet.dispose(); //  Dispose the income title controller
     _incomeDescriptionController
-        .dispose(); // * Dispose the income description controller
-    _incomeAmountController.dispose(); // * Dispose the income amount controller
-    _expenseTitleControllet.dispose(); // * Dispose the expense title controller
+        .dispose(); // Dispose the income description controller
+    _incomeAmountController.dispose(); // Dispose the income amount controller
+    _expenseTitleControllet.dispose(); // Dispose the expense title controller
     _expenseDescriptionController
-        .dispose(); // * Dispose the expense description controller
+        .dispose(); // Dispose the expense description controller
     _expenseAmountController
-        .dispose(); // * Dispose the expense amount controller
-    super.dispose(); // * Call the super dispose method
+        .dispose(); // Dispose the expense amount controller
+    super.dispose(); // Call the super dispose method
   }
 
   @override
@@ -85,13 +87,13 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
         ),
       ),
       child: Padding(
-        // * Padding for the form
+        // Padding for the form
         padding: const EdgeInsets.symmetric(
           horizontal: y250,
           vertical: y300,
         ),
         child: Form(
-          // * Form for the input fields
+          // Form for the input fields
           key: _formKey,
           child: Column(
             children: [
@@ -222,11 +224,9 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                 borderRadius: y500,
                 onTap: () async {
                   if (widget.pageState == 0) {
-                    List<Income>? incomeList =
-                        await IncomeService().getIncomeItems(context);
-                    int incomeIndex = incomeList?.length ?? 0;
+                    int incomeIndex = (widget.listLength["income"] as int) + 1;
                     Income newIncome = Income(
-                      id: (incomeIndex + 1).toString(),
+                      id: (incomeIndex).toString(),
                       description: _incomeDescriptionController.text,
                       category: incomeCategory,
                       amount: double.tryParse(_incomeAmountController.text) ??
@@ -234,10 +234,8 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                       date: _selectedDate,
                       time: _selectedTime,
                     );
-                    if (context.mounted) {
-                      Provider.of<TransactionProvider>(context, listen: false)
-                          .addIncomeItem(newIncome, context);
-                    }
+                    widget.addIncome(newIncome);
+
                     // RESET all input fields
                     _incomeTitleControllet.clear();
                     _incomeDescriptionController.clear();
@@ -248,11 +246,10 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                   }
 
                   if (context.mounted) {
-                    List<Expense>? expenseList =
-                        await ExpenseService().getExpensesAsList(context);
-                    int expenseIndex = expenseList?.length ?? 0;
+                    int expenseIndex =
+                        (widget.listLength["expense"] as int) + 1;
                     Expense newExpense = Expense(
-                      id: (expenseIndex + 1).toString(),
+                      id: (expenseIndex).toString(),
                       description: _expenseDescriptionController.text,
                       category: expenseCategory,
                       amount: double.tryParse(_expenseAmountController.text) ??
@@ -260,10 +257,7 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
                       date: _selectedDate,
                       time: _selectedTime,
                     );
-                    if (context.mounted) {
-                      Provider.of<TransactionProvider>(context, listen: false)
-                          .addExpenseItem(newExpense, context);
-                    }
+                    widget.addExpense(newExpense);
 
                     // RESET All input fields
                     _expenseTitleControllet.clear();
@@ -282,14 +276,14 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
     );
   }
 
-  // * Spacer for height
+  //  Spacer for height
   Widget getHeightSpacer() {
     return SizedBox(
       height: y150,
     );
   }
 
-  // * Input decoration for dropdown
+  // Input decoration for dropdown
   InputDecoration dropDownInputDecoration() {
     return InputDecoration(
       contentPadding: EdgeInsets.only(
@@ -331,7 +325,7 @@ class _ExpenseIncomeInputFormState extends State<ExpenseIncomeInputForm> {
     );
   }
 
-  // * Input decoration for text fields
+  // Input decoration for text fields
   InputDecoration inputDecoration(
     String hintText, {
     EdgeInsetsGeometry padding = const EdgeInsets.symmetric(

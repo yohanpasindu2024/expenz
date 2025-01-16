@@ -1,56 +1,45 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:expenz/models/ui_models/expense_income_model.dart/income_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IncomeService {
-  // KEY for income storage
+  // Key for income storage
   final String _key = "income";
 
-  // SAVE income item
-  Future<void> saveIncomeItem(Income income, BuildContext context) async {
+  // Save income item
+  Future<void> saveIncomeItem({
+    required Income income,
+    required void Function(String) message,
+  }) async {
     // DESETIALIZED income List
     List<Income> decIncomeList = [];
     // SERIALIZED income list
     List<String> serIncomeList = [];
     try {
+      print("${income.category.name} in Income Service");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       serIncomeList = prefs.getStringList(_key) ?? [];
-      decIncomeList =
-          serIncomeList.map((e) => Income.fromJSON(json.decode(e))).toList();
+      decIncomeList = _desrializeIncomeList(serIncomeList);
       decIncomeList.add(income);
-      serIncomeList =
-          decIncomeList.map((e) => json.encode(e.toJSON())).toList();
+      serIncomeList = _serializeIncomeList(decIncomeList);
       await prefs.setStringList(_key, serIncomeList);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Income item ${income.category.name} saving successed",
-            ),
-          ),
-        );
-      }
+      message("Income item ${income.category.name} saving successed");
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Income item ${income.category.name} saving failed",
-            ),
-          ),
-        );
-      }
+      message("Income item ${income.category.name} saving failed");
     }
   }
 
-  // GET income items
-  Future<List<Income>?> getIncomeItems(BuildContext context) async {
+  // Get income items
+  Future<List<Income>?> getIncomeItems({
+    required void Function(String) message,
+  }) async {
     // DESETIALIZED income List
     List<Income> decIncomeList = [];
     // SERIALIZED income list
@@ -58,25 +47,50 @@ class IncomeService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       serIncomeList = prefs.getStringList(_key) ?? [];
-      decIncomeList =
-          serIncomeList.map((e) => Income.fromJSON(json.decode(e))).toList();
+      decIncomeList = _desrializeIncomeList(serIncomeList);
       return decIncomeList;
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Items loding failure",
-            ),
-          ),
-        );
-      }
+      message(error.toString());
     }
 
     return [];
+  }
+
+  // Remove Income item
+  Future<void> removeItem({
+    required String index,
+    required void Function(String) message,
+  }) async {
+    try {
+      // DESETIALIZED income List
+      List<Income> decIncomeList = [];
+      // SERIALIZED income list
+      List<String> serIncomeList = [];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      serIncomeList = prefs.getStringList(_key) ?? [];
+      decIncomeList = _desrializeIncomeList(serIncomeList);
+      decIncomeList.removeWhere(
+        (element) {
+          return element.id == index;
+        },
+      );
+      serIncomeList = _serializeIncomeList(decIncomeList);
+      await prefs.setStringList(_key, serIncomeList);
+      message("Item deleted");
+    } catch (error) {
+      print(error.toString());
+      message(error.toString());
+    }
+  }
+
+  List<String> _serializeIncomeList(List<Income> incomeList) {
+    return incomeList.map((e) => json.encode(e.toJSON())).toList();
+  }
+
+  List<Income> _desrializeIncomeList(List<String> incomeList) {
+    return incomeList.map((e) => Income.fromJSON(json.decode(e))).toList();
   }
 }
