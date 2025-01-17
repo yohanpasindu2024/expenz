@@ -36,7 +36,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       selectedLabelStyle: const TextStyle(
         color: yBlackColor,
       ),
-      selectedItemColor: yPurpleColor,
+      selectedItemColor: yBlueColor,
       items: [
         const BottomNavigationBarItem(
           icon: Icon(
@@ -55,7 +55,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
             padding: EdgeInsets.all(y100),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: yPurpleColor,
+              color: yBlueColor,
             ),
             child: const Icon(
               Icons.add,

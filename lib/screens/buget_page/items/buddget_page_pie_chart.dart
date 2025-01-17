@@ -34,6 +34,7 @@ class _BuddgetPagePieChartState extends State<BuddgetPagePieChart> {
               PieChartData(
                 centerSpaceRadius: 70,
                 sections: _getPieChartSectionData(),
+                
               ),
             ),
             Center(
@@ -54,34 +55,64 @@ class _BuddgetPagePieChartState extends State<BuddgetPagePieChart> {
   List<PieChartSectionData> _getPieChartSectionData() {
     final List<Expense> listOfExpenses =
         widget.listOfItems["expense"] as List<Expense>;
-    double totalExpenses = listOfExpenses.fold(0, (sum, e) => sum + e.amount);
-
     final List<Income> listOfIncomes =
         widget.listOfItems["income"] as List<Income>;
+    double totalExpenses = listOfExpenses.fold(0, (sum, e) => sum + e.amount);
+
+    final Map<ExpenseCategories, double> totalExpenseCategoryValue = {
+      ExpenseCategories.shopping: 0,
+      ExpenseCategories.subscription: 0,
+      ExpenseCategories.foods: 0,
+      ExpenseCategories.health: 0,
+      ExpenseCategories.transport: 0,
+    };
+
+    final Map<IncomeCategories, double> totalIncomeCategoryValue = {
+      IncomeCategories.sallary: 0,
+      IncomeCategories.freelance: 0,
+      IncomeCategories.passiveIncome: 0,
+      IncomeCategories.gift: 0,
+    };
+
+    for (var expense in listOfExpenses) {
+      totalExpenseCategoryValue[expense.category] =
+          (totalExpenseCategoryValue[expense.category] ?? 0) + expense.amount;
+    }
+
+    for (var income in listOfIncomes) {
+      totalIncomeCategoryValue[income.category] =
+          (totalIncomeCategoryValue[income.category] ?? 0) + income.amount;
+    }
+
     double totalIncome = listOfIncomes.fold(0, (sum, e) => sum + e.amount);
 
     if (widget.pageState) {
-      return listOfIncomes.map((income) {
-        double percentage = (income.amount / totalIncome) * 100;
+      return totalIncomeCategoryValue.entries
+          .where((entry) => entry.value > 0)
+          .map((entry) {
+        double percentage = (entry.value / totalIncome) * 100;
 
         return PieChartSectionData(
-            value: income.amount,
-            color: incomeColorPathMap[income.category],
-            radius: 50,
-            title: "${percentage.toStringAsFixed(1)}%",
-            titleStyle: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ));
+          value: entry.value,
+          color: incomeColorPathMap[entry.key],
+          radius: 50,
+          title: "${percentage.toStringAsFixed(1)}%",
+          titleStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        );
       }).toList();
     } else {
-      return listOfExpenses.map((expense) {
-        double percentage = (expense.amount / totalExpenses) * 100;
+      return totalExpenseCategoryValue.entries
+          .where((entry) => entry.value > 0)
+          .map((entry) {
+        double percentage = (entry.value / totalExpenses) * 100;
 
         return PieChartSectionData(
-          value: expense.amount,
-          color: expenseColorPathMap[expense.category],
+          value: entry.value,
+          color: expenseColorPathMap[entry.key],
           radius: 50,
           title: "${percentage.toStringAsFixed(1)}%",
           titleStyle: const TextStyle(

@@ -25,7 +25,7 @@ class _WrapperState extends State<Wrapper> {
       theme: ThemeData(
         fontFamily: "Inter",
         buttonTheme: ButtonThemeData(
-          buttonColor: yPurpleColor,
+          buttonColor: yBlueColor,
           textTheme: ButtonTextTheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
@@ -34,9 +34,9 @@ class _WrapperState extends State<Wrapper> {
           ),
         ),
         scaffoldBackgroundColor: yWhiteColor,
-        primaryColor: yPurpleColor,
+        primaryColor: yBlueColor,
         iconTheme: IconThemeData(
-          color: yPurpleColor,
+          color: yBlueColor,
           size: y300,
         ),
       ),
