@@ -66,7 +66,7 @@ final Map<IncomeCategories, String> incomeImagePathMap = {
 // MAP for Income Color Path
 final Map<IncomeCategories, Color> incomeColorPathMap = {
   IncomeCategories.sallary: yGreenColor,
-  IncomeCategories.freelance: yBlackColor,
+  IncomeCategories.freelance: yOrangeColor,
   IncomeCategories.passiveIncome: yBlueColor,
   IncomeCategories.gift: yYellowColor,
 };

@@ -212,6 +212,11 @@ class _MainLayoutState extends State<MainLayout> {
         },
         userName: userName,
         listOfExpenses: listOfExpenses!,
+        toAddNewPage: () {
+          setState(() {
+            pageSelectionIndex = 2;
+          });
+        },
       ),
       TranscationPage(
         removeExpense: (expense) => removeExpenseItem(expense: expense),
@@ -219,6 +224,11 @@ class _MainLayoutState extends State<MainLayout> {
         listOfItems: {
           "income": listOfIncomes!,
           "expense": listOfExpenses!,
+        },
+        toAddNewPage: () {
+          setState(() {
+            pageSelectionIndex = 2;
+          });
         },
       ),
       AddNewPage(
@@ -229,7 +239,13 @@ class _MainLayoutState extends State<MainLayout> {
           "expense": listOfExpenses!.length,
         },
       ),
-      BudgetPage(),
+      BudgetPage(
+        listOfItems: {"income": listOfIncomes!, "expense": listOfExpenses!},
+        total: {
+          "income": totalIncome,
+          "expense": totalExpense,
+        },
+      ),
       ProfilePage(),
     ];
 
@@ -243,7 +259,7 @@ class _MainLayoutState extends State<MainLayout> {
         },
         selectedIndex: pageSelectionIndex,
       ),
-      body: pages[pageSelectionIndex],
+      body: pages[3],
     );
   }
 }

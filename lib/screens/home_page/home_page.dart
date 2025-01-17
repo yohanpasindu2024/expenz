@@ -4,6 +4,7 @@ import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/recent_transcation_model.dart';
+import 'package:expenz/reusables/add_new_placeholder.dart';
 import 'package:expenz/screens/home_page/items/amount_expenzes_card.dart';
 import 'package:expenz/screens/home_page/items/line_chart_widget.dart';
 import 'package:expenz/screens/transcation_page/items/income_expense_display_card.dart';
@@ -16,12 +17,14 @@ class HomePage extends StatefulWidget {
   final Map<String, double> totalValue;
   final List<RecentTranscationModel> listOfRecents;
   final List<Expense> listOfExpenses;
+  final void Function() toAddNewPage;
   const HomePage({
     super.key,
     required this.userName,
     required this.totalValue,
     required this.listOfRecents,
     required this.listOfExpenses,
+    required this.toAddNewPage,
   });
 
   @override
@@ -168,7 +171,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-            
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: y150,
@@ -186,41 +188,49 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: y200,
                   ),
-                  ListView.builder(
-                    itemCount: widget.listOfRecents.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    clipBehavior: Clip.none,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      RecentTranscationModel item = widget.listOfRecents[index];
-                      if (item.expense != null) {
-                        return IncomeExpenseDisplayCard(
-                          containerColor: item.expense!.color,
-                          amountColor: yOrangeColor,
-                          imagePath: item.expense!.imagePath,
-                          title: item.expense!.category.name,
-                          description: item.expense!.description,
-                          amount: "- ${item.expense!.amount}\$",
-                          time:
-                              DateFormat("hh:mm a").format(item.expense!.time),
-                        );
-                      }
+                  widget.listOfRecents.isEmpty
+                      ? AddNewPlaceholder(
+                          toAddNewPage: () {
+                            widget.toAddNewPage();
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: widget.listOfRecents.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          clipBehavior: Clip.none,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            RecentTranscationModel item =
+                                widget.listOfRecents[index];
+                            if (item.expense != null) {
+                              return IncomeExpenseDisplayCard(
+                                containerColor: item.expense!.color,
+                                amountColor: yOrangeColor,
+                                imagePath: item.expense!.imagePath,
+                                title: item.expense!.category.name,
+                                description: item.expense!.description,
+                                amount: "- ${item.expense!.amount}\$",
+                                time: DateFormat("hh:mm a")
+                                    .format(item.expense!.time),
+                              );
+                            }
 
-                      if (item.income != null) {
-                        return IncomeExpenseDisplayCard(
-                          containerColor: item.income!.color,
-                          amountColor: yGreenColor,
-                          imagePath: item.income!.imagePath,
-                          title: item.income!.category.name,
-                          description: item.income!.description,
-                          amount: "+ ${item.income!.amount}\$",
-                          time: DateFormat("hh:mm a").format(item.income!.time),
-                        );
-                      }
-                      return null;
-                    },
-                  ),
+                            if (item.income != null) {
+                              return IncomeExpenseDisplayCard(
+                                containerColor: item.income!.color,
+                                amountColor: yGreenColor,
+                                imagePath: item.income!.imagePath,
+                                title: item.income!.category.name,
+                                description: item.income!.description,
+                                amount: "+ ${item.income!.amount}\$",
+                                time: DateFormat("hh:mm a")
+                                    .format(item.income!.time),
+                              );
+                            }
+                            return null;
+                          },
+                        ),
                 ],
               ),
             )

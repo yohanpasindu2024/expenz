@@ -3,6 +3,7 @@ import 'package:expenz/constants/strings.dart';
 import 'package:expenz/constants/values.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
 import 'package:expenz/models/ui_models/expense_income_model.dart/income_model.dart';
+import 'package:expenz/reusables/add_new_placeholder.dart';
 import 'package:expenz/screens/transcation_page/items/income_expense_display_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,11 +13,13 @@ class TranscationPage extends StatefulWidget {
   final Map<String, List<dynamic>> listOfItems;
   final void Function(Income) removeIncome;
   final void Function(Expense) removeExpense;
+  final void Function() toAddNewPage;
   const TranscationPage({
     super.key,
     required this.listOfItems,
     required this.removeIncome,
     required this.removeExpense,
+    required this.toAddNewPage,
   });
 
   @override
@@ -77,31 +80,38 @@ class _TranscationPageState extends State<TranscationPage> {
                       padding: const EdgeInsets.symmetric(
                         vertical: y150,
                       ),
-                      child: ListView.builder(
-                        itemCount: listOfIncomes.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        physics: const BouncingScrollPhysics(),
-                        clipBehavior: Clip.none,
-                        itemBuilder: (context, index) {
-                          Income item = listOfIncomes[index];
-                          return Dismissible(
-                            key: ValueKey(item),
-                            onDismissed: (direction) async {
-                              widget.removeIncome(item);
-                            },
-                            child: IncomeExpenseDisplayCard(
-                              containerColor: item.color,
-                              amountColor: yGreenColor,
-                              imagePath: item.imagePath,
-                              title: item.category.name,
-                              description: item.description,
-                              amount: "+ ${item.amount}\$",
-                              time: DateFormat("hh:mm a").format(item.time),
+                      child: listOfIncomes.isEmpty
+                          ? AddNewPlaceholder(
+                              toAddNewPage: () {
+                                widget.toAddNewPage();
+                              },
+                            )
+                          : ListView.builder(
+                              itemCount: listOfIncomes.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: const BouncingScrollPhysics(),
+                              clipBehavior: Clip.none,
+                              itemBuilder: (context, index) {
+                                Income item = listOfIncomes[index];
+                                return Dismissible(
+                                  key: ValueKey(item),
+                                  onDismissed: (direction) async {
+                                    widget.removeIncome(item);
+                                  },
+                                  child: IncomeExpenseDisplayCard(
+                                    containerColor: item.color,
+                                    amountColor: yGreenColor,
+                                    imagePath: item.imagePath,
+                                    title: item.category.name,
+                                    description: item.description,
+                                    amount: "+ ${item.amount}\$",
+                                    time:
+                                        DateFormat("hh:mm a").format(item.time),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),
@@ -125,31 +135,38 @@ class _TranscationPageState extends State<TranscationPage> {
                       padding: const EdgeInsets.symmetric(
                         vertical: y150,
                       ),
-                      child: ListView.builder(
-                        itemCount: listOfExpenses.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        physics: const BouncingScrollPhysics(),
-                        clipBehavior: Clip.none,
-                        itemBuilder: (context, index) {
-                          Expense item = listOfExpenses[index];
-                          return Dismissible(
-                            key: ValueKey(item),
-                            onDismissed: (direction) {
-                              widget.removeExpense(item);
-                            },
-                            child: IncomeExpenseDisplayCard(
-                              containerColor: item.color,
-                              amountColor: yOrangeColor,
-                              imagePath: item.imagePath,
-                              title: item.category.name,
-                              description: item.description,
-                              amount: "- ${item.amount}\$",
-                              time: DateFormat("hh:mm a").format(item.time),
+                      child: listOfExpenses.isEmpty
+                          ? AddNewPlaceholder(
+                              toAddNewPage: () {
+                                widget.toAddNewPage();
+                              },
+                            )
+                          : ListView.builder(
+                              itemCount: listOfExpenses.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: const BouncingScrollPhysics(),
+                              clipBehavior: Clip.none,
+                              itemBuilder: (context, index) {
+                                Expense item = listOfExpenses[index];
+                                return Dismissible(
+                                  key: ValueKey(item),
+                                  onDismissed: (direction) {
+                                    widget.removeExpense(item);
+                                  },
+                                  child: IncomeExpenseDisplayCard(
+                                    containerColor: item.color,
+                                    amountColor: yOrangeColor,
+                                    imagePath: item.imagePath,
+                                    title: item.category.name,
+                                    description: item.description,
+                                    amount: "- ${item.amount}\$",
+                                    time:
+                                        DateFormat("hh:mm a").format(item.time),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),
