@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:expenz/models/ui_models/expense_income_model.dart/expense_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseService {
@@ -65,6 +66,18 @@ class ExpenseService {
       message("Item deleted");
     } catch (error) {
       message("Item deleting failed");
+    }
+  }
+
+  Future<void> clearAllExpenses({
+    required void Function(String) message,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_key);
+    } catch (error) {
+      if (kDebugMode) print(error.toString());
+      message("Expense items deleting failure");
     }
   }
 

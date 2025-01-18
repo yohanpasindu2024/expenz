@@ -81,15 +81,38 @@ class UserService {
     }
   }
 
-  static Future<String?> getUserName() async {
+  static Future<Map<String, String>> getUserName() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getString('userName');
+      final String userName = prefs.getString('userName')!;
+      final String email = prefs.getString("email")!;
+
+      return {
+        "userName": userName,
+        "email": email,
+      };
     } catch (err) {
-      if (kDebugMode) {
-        print(err.toString());
-      }
+      if (kDebugMode) print(err.toString());
     }
-    return null;
+    return {};
+  }
+
+  static Future<void> clearUserData({
+    required void Function(String) message,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await Future.wait([
+        prefs.remove("userName"),
+        prefs.remove("email"),
+        prefs.remove("password"),
+        prefs.remove("rememberMe"),
+      ]);
+
+      message("User deleted");
+    } catch (error) {
+      if (kDebugMode) print(error.toString());
+      message("Error deleting user");
+    }
   }
 }

@@ -86,6 +86,16 @@ class IncomeService {
     }
   }
 
+  Future<void> clearAllIncomes({required void Function(String) message}) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_key);
+    } catch (error) {
+      if (kDebugMode) print(error.toString());
+      message("Income deleting failure");
+    }
+  }
+
   List<String> _serializeIncomeList(List<Income> incomeList) {
     return incomeList.map((e) => json.encode(e.toJSON())).toList();
   }

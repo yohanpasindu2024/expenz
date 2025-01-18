@@ -5,6 +5,7 @@ import 'package:expenz/screens/add_new_page/add_new_page.dart';
 import 'package:expenz/screens/buget_page/budget_page.dart';
 import 'package:expenz/screens/home_page/home_page.dart';
 import 'package:expenz/screens/main_layout/items/bottm_navigation_bar_widget.dart';
+import 'package:expenz/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:expenz/screens/profile_page/profile_page.dart';
 import 'package:expenz/screens/transcation_page/transcation_page.dart';
 import 'package:expenz/services/expense_service.dart';
@@ -35,12 +36,40 @@ class _MainLayoutState extends State<MainLayout> {
   double totalExpense = 0;
 
   String userName = "";
+  String email = "";
+
+  Future<void> deleteUser() async {
+    await Future.wait([
+      IncomeService().clearAllIncomes(
+        message: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        },
+      ),
+      ExpenseService().clearAllExpenses(
+        message: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        },
+      ),
+      UserService.clearUserData(
+        message: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        },
+      ),
+    ]);
+  }
 
   // Load user name
   Future<void> loadUserName() async {
     await UserService.getUserName().then(
       (value) {
-        if (value != null) userName = value;
+        userName = value["userName"]!;
+        email = value["email"]!;
       },
     );
   }
@@ -246,7 +275,23 @@ class _MainLayoutState extends State<MainLayout> {
           "expense": totalExpense,
         },
       ),
-      ProfilePage(),
+      ProfilePage(
+        userData: {
+          "userName": userName,
+          "email": email,
+        },
+        logOut: () {
+          setState(() {
+            deleteUser();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OnBoardingScreen(),
+                ),
+                (route) => false);
+          });
+        },
+      ),
     ];
 
     return Scaffold(
@@ -259,7 +304,7 @@ class _MainLayoutState extends State<MainLayout> {
         },
         selectedIndex: pageSelectionIndex,
       ),
-      body: pages[3],
+      body: pages[pageSelectionIndex],
     );
   }
 }

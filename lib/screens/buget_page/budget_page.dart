@@ -135,7 +135,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                 category: item.key.name,
                                 width: item.value,
                                 color: incomeColorPathMap[item.key]!,
-                                value: "+\$${incomeCategoryTotal[item.key]}",
+                                value:
+                                    "+\$${incomeCategoryTotal[item.key]!.toInt()}",
                                 valueColor: yGreenColor,
                               );
                       },
@@ -153,7 +154,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                 category: item.key.name,
                                 width: item.value,
                                 color: expenseColorPathMap[item.key]!,
-                                value: "-\$${expenseCategoryTotal[item.key]}",
+                                value:
+                                    "-\$${expenseCategoryTotal[item.key]!.toInt()}",
                                 valueColor: yOrangeColor,
                               );
                       },

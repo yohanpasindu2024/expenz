@@ -92,7 +92,7 @@ class _ProgressCardState extends State<ProgressCard> {
             borderRadius: BorderRadius.circular(y300),
             value: widget.width,
             minHeight: y200 - 5,
-            valueColor: AlwaysStoppedAnimation<Color?>(widget.valueColor),
+            valueColor: AlwaysStoppedAnimation<Color?>(widget.color),
           ),
         ],
       ),
