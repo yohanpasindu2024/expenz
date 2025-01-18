@@ -28,6 +28,7 @@ class _TextFieldReusableState extends State<TextFieldReusable> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      
       controller: widget.controller,
       cursorColor: widget.color,
       // autofocus: true, // * Autofocus the text field
